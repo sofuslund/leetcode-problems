@@ -36,7 +36,7 @@ class Solution:
             # What if one k is in the lower part, and the other is in the upper part?
             # This creates a problem: we can't remove any parts because we may remove one of the k's
             # We need to make sure that that does not happen
-            if k == (lower_part-1):
+            if even and k == (lower_part-1):
                 if a_end>pa:
                     pa += 1
                 elif a_start<pa:
