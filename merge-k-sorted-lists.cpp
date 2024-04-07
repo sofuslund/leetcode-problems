@@ -18,31 +18,27 @@ public:
         ListNode* head = node;
 
         auto nodeCompare = [](ListNode* n1, ListNode* n2) {
-            if(n1 == nullptr) return false; // We do not want min_element to return nullptr each time
-            if(n2 == nullptr) return true;
+            if(n1 == nullptr) return true; // Nullptrs should be sorted lowest
+            if(n2 == nullptr) return false;
             return n1->val < n2->val;
         };
+        // First sort the heads in lists
+        sort(lists.begin(), lists.end(), nodeCompare);
+        while(lists.size()>0 && lists[0] == nullptr) { // Remove nullptrs
+            lists.erase(lists.begin());
+        }
         while (lists.size() > 0) {
-            ListNode* minElm = nullptr;
-            int minElmIdx = 0;
-            vector<ListNode*> newLists;
-            for (int i = 0; i < lists.size(); i++) {
-                if (lists[i] == nullptr) continue;
-                newLists.push_back(lists[i]);
-
-                if(minElm == nullptr || lists[i]->val < minElm->val) {
-                    minElm = lists[i];
-                    minElmIdx = newLists.size()-1;
-                }
-            }
-            if(newLists.size() == 0)
-                break;
-            newLists[minElmIdx] = newLists[minElmIdx]->next;
-            lists = newLists;
-
-            node->next = minElm;
+            // Next node in merged list should be the smallest element
+            node->next = lists[0];
             node = node->next;
-
+            // First remove the list head so it can be inserted in the right place afterwards
+            ListNode* newListHead = lists[0]->next;
+            lists.erase(lists.begin());
+            // Only reinsert if it is not a nullptr
+            if(newListHead != nullptr) {
+                // Insert the new list head in the right place so all list heads still are sorted
+                lists.insert(lower_bound(lists.begin(), lists.end(), newListHead, nodeCompare), newListHead);
+            }
         }
         ListNode* newHead = head->next;
         delete head;
