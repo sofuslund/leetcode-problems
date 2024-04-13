@@ -10,11 +10,11 @@ public:
             for(int j = 0; j < p.size(); j++) {
                 if (j+1 < p.size() && p[j+1] == '*') {
                     if (p[j] == '.') {
-                        if(dp[i][j])
+                        if(i==0 && dp[i][j])
                             dp[i][j+1] = true;
                         dp[i+1][j+1] = dp[i][j] || dp[i][j+1] || dp[i+1][j];
                     } else {
-                        if(dp[i][j])
+                        if(i==0 && dp[i][j])
                             dp[i][j+1] = true;
                         dp[i+1][j+1] = ((dp[i][j+1] || dp[i][j]) && p[j] == s[i]) || dp[i+1][j];
                     }
@@ -28,21 +28,21 @@ public:
                 }
             }
         }
-        cout << "    ";
-        for(int i = 0; i < s.size(); i++) {
-            cout << s[i] << " ";
-        }
-        cout << endl;
-        for(int i = 0; i <= p.size(); i++) {
-            if(i-1>=0)
-                cout << p[i-1] << ": ";
-            else
-                cout << "   ";
-            for(int j=0;j<=s.size();j++) {
-                cout << dp[j][i] << " ";
-            }
-            cout << endl;
-        }
+        // cout << "    ";
+        // for(int i = 0; i < s.size(); i++) {
+        //     cout << s[i] << " ";
+        // }
+        // cout << endl;
+        // for(int i = 0; i <= p.size(); i++) {
+        //     if(i-1>=0)
+        //         cout << p[i-1] << ": ";
+        //     else
+        //         cout << "   ";
+        //     for(int j=0;j<=s.size();j++) {
+        //         cout << dp[j][i] << " ";
+        //     }
+        //     cout << endl;
+        // }
 
         return dp[s.size()][p.size()];
     }
