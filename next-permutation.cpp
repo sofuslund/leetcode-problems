@@ -18,6 +18,7 @@ public:
             }
             iter_swap(nums.begin()+i-1, nums.begin() + next);
         }
-        sort(nums.begin()+i, nums.end());
+        // We know from the while statement earlier than i and above is sorted in reverse, now we sort them
+        reverse(nums.begin()+i, nums.end());
     }
 };
