@@ -6,7 +6,6 @@ public:
 
         while(stop-start+1>0) {
             mid = start + (stop-start+1)/2;
-            cout << start << " " << mid << " " << stop << endl;
             if(target>nums[mid]) {
                 smaller = mid;
                 start = mid+1;
@@ -14,13 +13,11 @@ public:
                 bigger = mid;
                 stop = mid-1;
             } else {
-                int prevMid = mid;
+                int prev_mid = mid;
 
                 // Find closest smaller element to target
                 start = smaller+1;
                 stop = mid-1;
-                cout << start << endl;
-                cout << stop << endl;
                 while(stop-start+1>0) {
                     mid = start + (stop-start+1)/2;
                     if(nums[mid] == target) {
@@ -31,12 +28,10 @@ public:
                     }
                 }
 
-                mid = prevMid;
+                mid = prev_mid;
                 // Find closest bigger element to target
                 start = mid+1;
                 stop = bigger-1;
-                cout << start << endl;
-                cout << stop << endl;
                 while(stop-start+1>0) {
                     mid = start + (stop-start+1)/2;
                     if(nums[mid] == target) {
@@ -46,7 +41,6 @@ public:
                         stop = mid-1;
                     }
                 }
-
                 return {smaller+1, bigger-1};
             }
         }
