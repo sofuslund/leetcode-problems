@@ -1,29 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
 class Solution {
-    vector<vector<int>> helper(vector<int>& candidates, int target, int sum, vector<int> solution, int idx) {
-        vector<vector<int>> solutions;
-        for(int i = idx+1; i < candidates.size(); i++) {
-            if(i > idx+1 && candidates[i-1] == candidates[i])
+    void helper(vector<int>& candidates, vector<vector<int>>& solutions, int target, int sum, vector<int>& solution, int idx) {
+        for(int i = idx; i < candidates.size(); i++) {
+            // To prevent duplicate solutions, only generate solutions for the lowest index element when there are multiple of the same candidates
+            if(i > idx && candidates[i-1] == candidates[i])
                 continue;
             if(sum + candidates[i] < target) {
-                auto tmp = solution;
-                tmp.push_back(candidates[i]);
-                auto new_solutions = helper(candidates, target, sum+candidates[i], tmp, i);
-                solutions.insert(solutions.end(), new_solutions.begin(), new_solutions.end());
+                solution.push_back(candidates[i]);
+                helper(candidates, solutions, target, sum+candidates[i], solution, i+1);
+                solution.pop_back();
             } else if(sum + candidates[i] > target) {
                 continue;
             } else {
-                auto tmp = solution;
-                tmp.push_back(candidates[i]);
-                solutions.push_back(tmp);
+                solution.push_back(candidates[i]);
+                solutions.push_back(solution);
+                solution.pop_back();
             }
         }
-        return solutions;
     }
 public:
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
         sort(candidates.begin(), candidates.end());
-        return helper(candidates, target, 0, {}, -1);
+        vector<int> solution_stack;
+        vector<vector<int>> solutions;
+        helper(candidates, solutions, target, 0, solution_stack, 0);
+        return solutions;
     }
 };

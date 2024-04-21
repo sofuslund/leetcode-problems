@@ -1,26 +1,24 @@
-class Solution {
-    vector<vector<int>> helper(vector<int>& cands, int k, int sum, vector<int> solution) {
-        vector<vector<int>> solutions;
-        for(int cand : cands) {
-            if(solution.size()>= 1 && cand<solution[solution.size()-1]) // We are only using sorted solutions so that we guarantee the same solution is not used twice
+ class Solution {
+    void helper(vector<int>& cands, vector<vector<int>>& solutions, int k, int sum, vector<int>& solution, int idx) {
+        for(int i = idx; i < cands.size(); i++) {
+            if(sum+cands[i] > k) 
                 continue;
-            if(sum+cand > k) 
-                continue;
-            else if (sum+cand < k){
-                auto tmp = solution;
-                tmp.push_back(cand);
-                auto sols = helper(cands, k, cand+sum, tmp);
-                solutions.insert(solutions.end(), sols.begin(), sols.end());
+            else if (sum+cands[i] < k){
+                solution.push_back(cands[i]);
+                helper(cands, solutions, k, cands[i]+sum, solution, i);
+                solution.pop_back();
             } else {
-                auto tmp = solution;
-                tmp.push_back(cand);
-                solutions.push_back(tmp);
+                solution.push_back(cands[i]);
+                solutions.push_back(solution);
+                solution.pop_back();
             }
         }
-        return solutions;
     }
 public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        return helper(candidates, target, 0, vector<int>());
+        vector<int> tmp;
+        vector<vector<int>> solutions;
+        helper(candidates, solutions, target, 0, tmp, 0);
+        return solutions;
     }
 };
