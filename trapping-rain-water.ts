@@ -27,3 +27,31 @@ function trap(height: number[]): number {
 
     return result;
 };
+
+// 40 times faster solution
+function trap(height: number[]): number {
+    let result: number = 0;
+    let max_height: number; // Current max height, sets the threshold for how high the water can go
+    let max_height_idx: number
+    function run(first: number, last: number, direction: 1|-1) {
+        max_height = height[first];
+        max_height_idx = first;
+        for (let i = first + direction; i*direction <= last*direction; i += direction) {
+            if (height[i] >= max_height) {
+                // A new max height is encountered: measure the trapped water in the newly made hole
+                for (let j = max_height_idx+direction; j*direction < i*direction; j += direction) {
+                    result += max_height - height[j];
+                }
+
+                // Set new max_height
+                max_height = height[i];
+                max_height_idx = i;
+            }
+        }
+    }
+
+    run(0, height.length-1, 1); // Approach the heighest pillar from left
+    run(height.length-1, max_height_idx, -1); // Approach the heighest pillar from right
+
+    return result;
+};
